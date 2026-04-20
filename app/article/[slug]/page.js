@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
   const article = getArticleBySlug(slug)
   if (!article) return { title: 'Not Found' }
 
-  const title = `${article.title} | Money Stack Guide`
+  const title = `${article.title}`
   const description = article.metaDescription
 
   return {
@@ -28,12 +28,12 @@ export async function generateMetadata({ params }) {
       'Money Stack Guide',
     ],
     alternates: {
-      canonical: `https://moneystackguide.com/article/${slug}`,
+      canonical: `https://www.moneystackguide.com/article/${slug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://moneystackguide.com/article/${slug}`,
+      url: `https://www.moneystackguide.com/article/${slug}`,
       type: 'article',
       publishedTime: article.date,
       section: article.categoryName,
@@ -69,16 +69,16 @@ export default async function ArticlePage({ params }) {
     author: {
       '@type': 'Organization',
       name: 'Money Stack Guide',
-      url: 'https://moneystackguide.com',
+      url: 'https://www.moneystackguide.com',
     },
     publisher: {
       '@type': 'Organization',
       name: 'Money Stack Guide',
-      url: 'https://moneystackguide.com',
+      url: 'https://www.moneystackguide.com',
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://moneystackguide.com/article/${slug}`,
+      '@id': `https://www.moneystackguide.com/article/${slug}`,
     },
   }
 
@@ -86,9 +86,9 @@ export default async function ArticlePage({ params }) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://moneystackguide.com' },
-      { '@type': 'ListItem', position: 2, name: article.categoryName, item: `https://moneystackguide.com/category/${article.category}` },
-      { '@type': 'ListItem', position: 3, name: article.title, item: `https://moneystackguide.com/article/${slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.moneystackguide.com' },
+      { '@type': 'ListItem', position: 2, name: article.categoryName, item: `https://www.moneystackguide.com/category/${article.category}` },
+      { '@type': 'ListItem', position: 3, name: article.title, item: `https://www.moneystackguide.com/article/${slug}` },
     ],
   }
 

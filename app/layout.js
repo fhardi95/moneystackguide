@@ -5,12 +5,13 @@ import Footer from '@/components/Footer'
 
 export const metadata = {
   metadataBase: new URL('https://www.moneystackguide.com'),
-  
+
   verification: {
     google: 'i9I3gKlXjvyvejYRC9Ch-9k7Ywfu76GczNV2IAwMOd0',
-	  Bing: 'msvalidate.01': '12iD3XhCQfYF5sf6FaMrzrGFxzrKJ4u85L',
+    other: {
+      'msvalidate.01': '12iD3XhCQfYF5sf6FaMrzrGFxzrKJ4u85L',
+    },
   },
-
   
   title: {
     default: 'Money Stack Guide — Smart Finance for Real Life',

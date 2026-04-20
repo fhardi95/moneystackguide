@@ -6,12 +6,12 @@ import styles from './page.module.css'
 
 export const metadata = {
   title: 'Money Stack Guide — UK Personal Finance Guides 2026',
-  description: 'UK Credit Cards, ISAs, Mortgages & Savings Accounts Compared – Best Rates, Expert Reviews & Money-Saving Tips (2026)',
+  description: 'Compare the best credit cards, student loans, ISAs, mortgages and savings accounts in the UK. Expert-reviewed guides updated monthly to help you make smarter money decisions and build real wealth.',
   alternates: {
     canonical: 'https://www.moneystackguide.com',
   },
   openGraph: {
-    title: 'Money Stack Guide — UK Personal Finance Guides 2026',
+    title: 'Money Stack Guide — UK Personal Finance Guides & Comparisons 2026',
     description: 'Compare the best credit cards, student loans, ISAs, mortgages and savings accounts in the UK. Trusted by 50,000+ readers.',
     url: 'https://www.moneystackguide.com',
     type: 'website',
@@ -43,7 +43,7 @@ export default function HomePage() {
 
         <nav className={styles.heroCtas} aria-label="Quick navigation">
           <Link href="/category/credit-cards" className="btn-primary">Browse All Guides</Link>
-          <Link href="/article/best-credit-cards-uk-2025" className="btn-outline">Best Credit Cards 2025 →</Link>
+          <Link href="/article/best-credit-cards-uk-2026" className="btn-outline">Best Credit Cards 2026 →</Link>
         </nav>
       </section>
 

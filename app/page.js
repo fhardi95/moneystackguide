@@ -5,15 +5,15 @@ import Newsletter from '@/components/Newsletter'
 import styles from './page.module.css'
 
 export const metadata = {
-  title: 'Money Stack Guide — UK Personal Finance Guides & Comparisons 2025',
-  description: 'Compare the best credit cards, student loans, ISAs, mortgages and savings accounts in the UK. Expert-reviewed guides updated monthly to help you make smarter money decisions and build real wealth.',
+  title: 'Money Stack Guide — UK Personal Finance Guides 2026',
+  description: 'UK Credit Cards, ISAs, Mortgages & Savings Accounts Compared – Best Rates, Expert Reviews & Money-Saving Tips (2026)',
   alternates: {
-    canonical: 'https://moneystackguide.com',
+    canonical: 'https://www.moneystackguide.com',
   },
   openGraph: {
-    title: 'Money Stack Guide — UK Personal Finance Guides & Comparisons 2025',
+    title: 'Money Stack Guide — UK Personal Finance Guides 2026',
     description: 'Compare the best credit cards, student loans, ISAs, mortgages and savings accounts in the UK. Trusted by 50,000+ readers.',
-    url: 'https://moneystackguide.com',
+    url: 'https://www.moneystackguide.com',
     type: 'website',
   },
 }

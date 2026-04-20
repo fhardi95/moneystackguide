@@ -13,7 +13,7 @@ export const metadata = {
   verification: {
   google: '...',
   other: {
-    'msvalidate.01': 'BING_CODE',
+    'msvalidate.01': '12iD3XhCQfYF5sf6FaMrzrGFxzrKJ4u85L',
   },
 }
   

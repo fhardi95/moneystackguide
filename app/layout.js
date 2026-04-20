@@ -7,7 +7,7 @@ export const metadata = {
   metadataBase: new URL('https://moneystackguide.com'),
   title: {
     default: 'Money Stack Guide — Smart Finance for Real Life',
-    template: '%s | Money Stack Guide',
+    template: '%s',
   },
   description: 'Expert guides on credit cards, student loans, investing, mortgages and budgeting. Make smarter money decisions with Money Stack Guide — trusted by 50,000+ UK readers.',
   keywords: ['credit cards UK', 'student loans UK', 'investing UK', 'mortgages UK', 'budgeting tips', 'savings accounts UK', 'personal finance UK'],

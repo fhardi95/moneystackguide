@@ -4,14 +4,19 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
 export const metadata = {
-  metadataBase: new URL('https://moneystackguide.com'),
+  metadataBase: new URL('https://www.moneystackguide.com'),
+  
+  verification: {
+    google: 'i9I3gKlXjvyvejYRC9Ch-9k7Ywfu76GczNV2IAwMOd0',
+  },
+  
   title: {
     default: 'Money Stack Guide — Smart Finance for Real Life',
     template: '%s',
   },
   description: 'Expert guides on credit cards, student loans, investing, mortgages and budgeting. Make smarter money decisions with Money Stack Guide — trusted by 50,000+ UK readers.',
   keywords: ['credit cards UK', 'student loans UK', 'investing UK', 'mortgages UK', 'budgeting tips', 'savings accounts UK', 'personal finance UK'],
-  authors: [{ name: 'Money Stack Guide', url: 'https://moneystackguide.com' }],
+  authors: [{ name: 'Money Stack Guide', url: 'https://www.moneystackguide.com' }],
   creator: 'Money Stack Guide',
   publisher: 'Money Stack Guide',
   robots: {
@@ -28,7 +33,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: 'https://moneystackguide.com',
+    url: 'https://www.moneystackguide.com',
     siteName: 'Money Stack Guide',
     title: 'Money Stack Guide — Smart Finance for Real Life',
     description: 'Expert guides on credit cards, student loans, investing, mortgages and budgeting. Trusted by 50,000+ UK readers.',
@@ -40,7 +45,7 @@ export const metadata = {
     site: '@moneystackguide',
   },
   alternates: {
-    canonical: 'https://moneystackguide.com',
+    canonical: 'https://www.moneystackguide.com',
   },
 }
 
@@ -62,16 +67,16 @@ export default function RootLayout({ children }) {
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               name: 'Money Stack Guide',
-              url: 'https://moneystackguide.com',
+              url: 'https://www.moneystackguide.com',
               description: 'Expert finance guides for UK readers',
               publisher: {
                 '@type': 'Organization',
                 name: 'Money Stack Guide',
-                url: 'https://moneystackguide.com',
+                url: 'https://www.moneystackguide.com',
               },
               potentialAction: {
                 '@type': 'SearchAction',
-                target: 'https://moneystackguide.com/search?q={search_term_string}',
+                target: 'https://www.moneystackguide.com/search?q={search_term_string}',
                 'query-input': 'required name=search_term_string',
               },
             }),

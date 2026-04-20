@@ -10,6 +10,13 @@ export const metadata = {
     google: 'i9I3gKlXjvyvejYRC9Ch-9k7Ywfu76GczNV2IAwMOd0',
   },
   
+  verification: {
+  google: '...',
+  other: {
+    'msvalidate.01': 'BING_CODE',
+  },
+}
+  
   title: {
     default: 'Money Stack Guide — Smart Finance for Real Life',
     template: '%s',

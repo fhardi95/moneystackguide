@@ -60,11 +60,11 @@ export default function Footer() {
 
             <div className={styles.navCol}>
               <h3 className={styles.colTitle}>Company</h3>
-              <Link href="/" className={styles.navLink}>About Us</Link>
-              <Link href="/" className={styles.navLink}>Contact</Link>
-              <Link href="/" className={styles.navLink}>Advertise</Link>
-              <Link href="/" className={styles.navLink}>Privacy Policy</Link>
-              <Link href="/" className={styles.navLink}>Terms of Service</Link>
+              <Link href="/about" className={styles.navLink}>About Us</Link>
+              <Link href="/contact" className={styles.navLink}>Contact</Link>
+              <Link href="/advertise" className={styles.navLink}>Advertise</Link>
+              <Link href="/privacy-policy" className={styles.navLink}>Privacy Policy</Link>
+              <Link href="/terms-of-service" className={styles.navLink}>Terms of Service</Link>
               <Link href="/sitemap.xml" className={styles.navLink}>Sitemap</Link>
             </div>
 

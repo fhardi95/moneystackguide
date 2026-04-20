@@ -6,14 +6,13 @@ import ArticleCard from '@/components/ArticleCard'
 import ArticleContent from '@/components/ArticleContent'
 import styles from './page.module.css'
 
-// Generate static pages at build time for all articles
 export async function generateStaticParams() {
   return articles.map(article => ({ slug: article.slug }))
 }
 
-// Generate SEO metadata per article
 export async function generateMetadata({ params }) {
-  const article = getArticleBySlug(params.slug)
+  const { slug } = await params
+  const article = getArticleBySlug(slug)
   if (!article) return { title: 'Not Found' }
 
   const title = `${article.title} | Money Stack Guide`
@@ -29,12 +28,12 @@ export async function generateMetadata({ params }) {
       'Money Stack Guide',
     ],
     alternates: {
-      canonical: `https://moneystackguide.com/article/${article.slug}`,
+      canonical: `https://moneystackguide.com/article/${slug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://moneystackguide.com/article/${article.slug}`,
+      url: `https://moneystackguide.com/article/${slug}`,
       type: 'article',
       publishedTime: article.date,
       section: article.categoryName,
@@ -48,20 +47,18 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default function ArticlePage({ params }) {
-  const article = getArticleBySlug(params.slug)
+export default async function ArticlePage({ params }) {
+  const { slug } = await params
+  const article = getArticleBySlug(slug)
   if (!article) notFound()
 
   const related = getArticlesByCategory(article.category)
-    .filter(a => a.slug !== article.slug)
+    .filter(a => a.slug !== slug)
     .slice(0, 3)
 
-  const allRecent = getRecentArticles(3).filter(a => a.slug !== article.slug)
+  const allRecent = getRecentArticles(3).filter(a => a.slug !== slug)
   const relatedArticles = related.length > 0 ? related : allRecent
 
-  const category = categories.find(c => c.slug === article.category)
-
-  // Schema.org Article structured data
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -78,50 +75,36 @@ export default function ArticlePage({ params }) {
       '@type': 'Organization',
       name: 'Money Stack Guide',
       url: 'https://moneystackguide.com',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://moneystackguide.com/logo.png',
-      },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://moneystackguide.com/article/${article.slug}`,
+      '@id': `https://moneystackguide.com/article/${slug}`,
     },
   }
 
-  // BreadcrumbList schema
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://moneystackguide.com' },
       { '@type': 'ListItem', position: 2, name: article.categoryName, item: `https://moneystackguide.com/category/${article.category}` },
-      { '@type': 'ListItem', position: 3, name: article.title, item: `https://moneystackguide.com/article/${article.slug}` },
+      { '@type': 'ListItem', position: 3, name: article.title, item: `https://moneystackguide.com/article/${slug}` },
     ],
   }
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
       <div className={styles.page}>
-        {/* Hero banner */}
         <div className={styles.heroWrap} style={{ background: article.gradient }} role="banner">
           <span className={styles.heroIcon} aria-hidden="true">{article.icon}</span>
         </div>
 
         <div className={styles.layout}>
-          {/* MAIN ARTICLE */}
           <article className={styles.article} itemScope itemType="https://schema.org/Article">
 
-            {/* Breadcrumb navigation — helps bots understand site structure */}
             <nav className={styles.breadcrumb} aria-label="Breadcrumb">
               <ol className={styles.breadcrumbList}>
                 <li><Link href="/">Home</Link></li>
@@ -134,7 +117,6 @@ export default function ArticlePage({ params }) {
 
             <p className={styles.catBadge}>{article.categoryName}</p>
 
-            {/* H1 — the article's primary heading, includes keyword */}
             <h1 className={styles.title} itemProp="headline">{article.title}</h1>
 
             <div className={styles.meta}>
@@ -147,15 +129,13 @@ export default function ArticlePage({ params }) {
 
             <div className={styles.divider} aria-hidden="true" />
 
-            {/* Article body rendered from markdown */}
             <ArticleContent content={article.content} />
 
-            {/* Internal links to related category articles */}
             <div className={styles.internalLinks}>
               <h2 className={styles.internalLinksTitle}>More {article.categoryName} Guides</h2>
               <ul className={styles.internalLinksList}>
                 {getArticlesByCategory(article.category)
-                  .filter(a => a.slug !== article.slug)
+                  .filter(a => a.slug !== slug)
                   .slice(0, 5)
                   .map(a => (
                     <li key={a.slug}>
@@ -177,9 +157,7 @@ export default function ArticlePage({ params }) {
             </div>
           </article>
 
-          {/* SIDEBAR */}
           <aside className={styles.sidebar} aria-label="Sidebar navigation">
-            {/* Browse all categories */}
             <nav className={styles.sideCard} aria-label="Browse categories">
               <h2 className={styles.sideCardTitle}>Browse Categories</h2>
               <ul style={{ listStyle: 'none' }}>
@@ -198,11 +176,10 @@ export default function ArticlePage({ params }) {
               </ul>
             </nav>
 
-            {/* Popular articles */}
             <div className={styles.sideCard}>
               <h2 className={styles.sideCardTitle}>Popular Guides</h2>
               <ul style={{ listStyle: 'none' }}>
-                {getRecentArticles(5).filter(a => a.slug !== article.slug).slice(0, 4).map(a => (
+                {getRecentArticles(5).filter(a => a.slug !== slug).slice(0, 4).map(a => (
                   <li key={a.slug} style={{ marginBottom: '0.75rem' }}>
                     <Link href={`/article/${a.slug}`} className={styles.popularLink}>
                       <span style={{ fontSize: '1rem' }}>{a.icon}</span>
@@ -222,7 +199,6 @@ export default function ArticlePage({ params }) {
           </aside>
         </div>
 
-        {/* RELATED ARTICLES */}
         <div className="container">
           <section className="section" aria-labelledby="related-heading">
             <p className="section-label">Keep Reading</p>

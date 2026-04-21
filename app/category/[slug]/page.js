@@ -1,40 +1,42 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getArticlesByCategory, categories, articles } from '@/lib/articles'
-import ArticleCard from '@/components/ArticleCard'
+import { getArticleBySlug, getRecentArticles, getArticlesByCategory, categories, articles } from '@/lib/articles'
 import Newsletter from '@/components/Newsletter'
+import ArticleCard from '@/components/ArticleCard'
+import ArticleContent from '@/components/ArticleContent'
 import styles from './page.module.css'
 
 export async function generateStaticParams() {
-  return categories.map(cat => ({ slug: cat.slug }))
+  return articles.map(article => ({ slug: article.slug }))
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params
-  const category = categories.find(c => c.slug === slug)
-  if (!category) return { title: 'Not Found' }
+  const article = getArticleBySlug(slug)
+  if (!article) return { title: 'Not Found' }
 
-  const title = `Best ${category.name} UK 2026 — Expert Guides & Comparisons`
-  const description = `Compare the best ${category.name.toLowerCase()} options in the UK for 2026. Expert-reviewed guides, tips and comparisons to help you find the right ${category.name.toLowerCase()} product for your needs and save money.`
+  const title = `${article.title}`
+  const description = article.metaDescription
 
   return {
     title,
     description,
     keywords: [
-      `best ${category.name.toLowerCase()} UK`,
-      `${category.name.toLowerCase()} 2026`,
-      `${category.name.toLowerCase()} comparison`,
+      article.categoryName,
       'UK personal finance',
+      article.title.split(' ').slice(0, 4).join(' '),
       'Money Stack Guide',
     ],
     alternates: {
-      canonical: `https://moneystackguide.com/category/${slug}`,
+      canonical: `https://www.moneystackguide.com/article/${slug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://moneystackguide.com/category/${slug}`,
-      type: 'website',
+      url: `https://www.moneystackguide.com/article/${slug}`,
+      type: 'article',
+      publishedTime: article.date,
+      section: article.categoryName,
       siteName: 'Money Stack Guide',
     },
     twitter: {
@@ -45,136 +47,172 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function CategoryPage({ params }) {
+export default async function ArticlePage({ params }) {
   const { slug } = await params
-  const category = categories.find(c => c.slug === slug)
-  if (!category) notFound()
+  const article = getArticleBySlug(slug)
+  if (!article) notFound()
 
-  const categoryArticles = getArticlesByCategory(slug)
-  const otherCategories = categories.filter(c => c.slug !== slug)
+  const related = getArticlesByCategory(article.category)
+    .filter(a => a.slug !== slug)
+    .slice(0, 3)
+
+  const allRecent = getRecentArticles(3).filter(a => a.slug !== slug)
+  const relatedArticles = related.length > 0 ? related : allRecent
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description: article.metaDescription,
+    datePublished: article.date,
+    dateModified: article.date,
+    author: {
+      '@type': 'Organization',
+      name: 'Money Stack Guide',
+      url: 'https://www.moneystackguide.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Money Stack Guide',
+      url: 'https://www.moneystackguide.com',
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://www.moneystackguide.com/article/${slug}`,
+    },
+  }
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://moneystackguide.com' },
-      { '@type': 'ListItem', position: 2, name: category.name, item: `https://moneystackguide.com/category/${slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.moneystackguide.com' },
+      { '@type': 'ListItem', position: 2, name: article.categoryName, item: `https://www.moneystackguide.com/category/${article.category}` },
+      { '@type': 'ListItem', position: 3, name: article.title, item: `https://www.moneystackguide.com/article/${slug}` },
     ],
-  }
-
-  const collectionSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: `${category.name} Guides — Money Stack Guide`,
-    description: `Expert ${category.name.toLowerCase()} guides for UK readers`,
-    url: `https://moneystackguide.com/category/${slug}`,
   }
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
-      <header className={styles.header}>
-        <div className={styles.headerInner}>
-
-          <nav className={styles.breadcrumb} aria-label="Breadcrumb">
-            <ol className={styles.breadcrumbList}>
-              <li><Link href="/">Home</Link></li>
-              <li aria-hidden="true"> › </li>
-              <li aria-current="page">{category.name}</li>
-            </ol>
-          </nav>
-
-          <div className={styles.icon} aria-hidden="true">{category.icon}</div>
-          <p className={styles.headerLabel}>Category</p>
-
-          <h1 className={styles.headerTitle}>
-            Best {category.name} UK 2026
-          </h1>
-
-          <p className={styles.headerSub}>
-            Expert-reviewed {category.name.toLowerCase()} guides, comparisons and advice for UK readers — all updated regularly so you always get the most accurate information.
-          </p>
-
-          <div className={styles.headerMeta}>
-            <span>{category.count} guides</span>
-            <span>·</span>
-            <span>Updated April 2026</span>
-            <span>·</span>
-            <span>✅ Expert reviewed</span>
-          </div>
+      <div className={styles.page}>
+        <div className={styles.heroWrap} style={{ background: article.gradient }} role="banner">
+          <span className={styles.heroIcon} aria-hidden="true">{article.icon}</span>
         </div>
-      </header>
 
-      <div className="container">
+        <div className={styles.layout}>
+          <article className={styles.article} itemScope itemType="https://schema.org/Article">
 
-        <section className="section" aria-labelledby="articles-heading">
-          {categoryArticles.length > 0 ? (
-            <>
-              <p className="section-label">All Guides</p>
-              <h2 className="section-title" id="articles-heading">
-                {category.name} Articles &amp; Comparisons
-              </h2>
-              <div className={styles.grid}>
-                {categoryArticles.map(article => (
-                  <ArticleCard key={article.slug} article={article} />
-                ))}
-              </div>
-            </>
-          ) : (
-            <div className={styles.empty}>
-              <div className={styles.emptyIcon} aria-hidden="true">{category.icon}</div>
-              <h2>More {category.name} guides coming soon</h2>
-              <p>We are working on expert-reviewed {category.name.toLowerCase()} content. Subscribe to our newsletter to be notified when new guides go live.</p>
-              <Link href="/" className="btn-primary" style={{ marginTop: '1.5rem', display: 'inline-block' }}>
-                Browse All Guides
-              </Link>
+            <nav className={styles.breadcrumb} aria-label="Breadcrumb">
+              <ol className={styles.breadcrumbList}>
+                <li><Link href="/">Home</Link></li>
+                <li aria-hidden="true"> › </li>
+                <li><Link href={`/category/${article.category}`}>{article.categoryName}</Link></li>
+                <li aria-hidden="true"> › </li>
+                <li aria-current="page">{article.categoryName} Guide</li>
+              </ol>
+            </nav>
+
+            <p className={styles.catBadge}>{article.categoryName}</p>
+
+            <h1 className={styles.title} itemProp="headline">{article.title}</h1>
+
+            <div className={styles.meta}>
+              <time dateTime={article.date} itemProp="datePublished">📅 {article.date}</time>
+              <span>⏱ {article.readTime}</span>
+              <span>✅ Expert reviewed</span>
             </div>
-          )}
-        </section>
 
-        <section className="section" style={{ paddingTop: 0 }} aria-labelledby="other-cats-heading">
-          <p className="section-label">Explore More</p>
-          <h2 className="section-title" id="other-cats-heading">Other Finance Categories</h2>
-          <nav aria-label="Other finance categories">
-            <ul className={styles.catGrid} style={{ listStyle: 'none', padding: 0 }}>
-              {otherCategories.map(cat => (
-                <li key={cat.slug}>
-                  <Link href={`/category/${cat.slug}`} className={styles.catCard}>
-                    <span className={styles.catIcon} aria-hidden="true">{cat.icon}</span>
-                    <div>
-                      <div className={styles.catName}>{cat.name}</div>
-                      <div className={styles.catCount}>{cat.count} guides</div>
-                    </div>
+            <p className={styles.lead} itemProp="description">{article.excerpt}</p>
+
+            <div className={styles.divider} aria-hidden="true" />
+
+            <ArticleContent content={article.content} />
+
+            <div className={styles.internalLinks}>
+              <h2 className={styles.internalLinksTitle}>More {article.categoryName} Guides</h2>
+              <ul className={styles.internalLinksList}>
+                {getArticlesByCategory(article.category)
+                  .filter(a => a.slug !== slug)
+                  .slice(0, 5)
+                  .map(a => (
+                    <li key={a.slug}>
+                      <Link href={`/article/${a.slug}`} className={styles.internalLink}>
+                        {a.icon} {a.title}
+                      </Link>
+                    </li>
+                  ))}
+                <li>
+                  <Link href={`/category/${article.category}`} className={styles.internalLinkAll}>
+                    View all {article.categoryName} guides →
                   </Link>
                 </li>
-              ))}
-            </ul>
-          </nav>
-        </section>
+              </ul>
+            </div>
 
-        {categoryArticles.length > 0 && (
-          <section className="section" style={{ paddingTop: 0 }} aria-labelledby="quicklinks-heading">
-            <p className="section-label">Quick Links</p>
-            <h2 className="section-title" id="quicklinks-heading">All {category.name} Guides</h2>
-            <ul className={styles.quickLinks}>
-              {categoryArticles.map(article => (
-                <li key={article.slug}>
-                  <Link href={`/article/${article.slug}`} className={styles.quickLink}>
-                    <span aria-hidden="true">{article.icon}</span>
-                    <span>{article.title}</span>
-                    <span className={styles.quickLinkMeta}>{article.readTime}</span>
-                  </Link>
-                </li>
+            <div className={styles.disclaimer}>
+              <strong>Disclaimer:</strong> This article is for informational purposes only and does not constitute financial advice. Always check the latest rates and terms directly with providers. Your personal circumstances will affect which products are suitable for you. Money Stack Guide may receive commission when you apply for products via our links.
+            </div>
+          </article>
+
+          <aside className={styles.sidebar} aria-label="Sidebar navigation">
+            <nav className={styles.sideCard} aria-label="Browse categories">
+              <h2 className={styles.sideCardTitle}>Browse Categories</h2>
+              <ul style={{ listStyle: 'none' }}>
+                {categories.map(cat => (
+                  <li key={cat.slug}>
+                    <Link
+                      href={`/category/${cat.slug}`}
+                      className={`${styles.sideLink} ${cat.slug === article.category ? styles.sideLinkActive : ''}`}
+                    >
+                      <span aria-hidden="true">{cat.icon}</span>
+                      <span>{cat.name}</span>
+                      <span className={styles.sideLinkCount}>{cat.count}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <div className={styles.sideCard}>
+              <h2 className={styles.sideCardTitle}>Popular Guides</h2>
+              <ul style={{ listStyle: 'none' }}>
+                {getRecentArticles(5).filter(a => a.slug !== slug).slice(0, 4).map(a => (
+                  <li key={a.slug} style={{ marginBottom: '0.75rem' }}>
+                    <Link href={`/article/${a.slug}`} className={styles.popularLink}>
+                      <span style={{ fontSize: '1rem' }}>{a.icon}</span>
+                      <span>{a.title}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={styles.sideCard}>
+              <h3 className={styles.sideCardTitle}>💡 Quick Tip</h3>
+              <p className={styles.sideCardText}>
+                Always use a soft eligibility checker before applying for any credit product — it will not affect your credit score.
+              </p>
+            </div>
+          </aside>
+        </div>
+
+        <div className="container">
+          <section className="section" aria-labelledby="related-heading">
+            <p className="section-label">Keep Reading</p>
+            <h2 className="section-title" id="related-heading">Related {article.categoryName} Guides</h2>
+            <div className={styles.relatedGrid}>
+              {relatedArticles.map(a => (
+                <ArticleCard key={a.slug} article={a} />
               ))}
-            </ul>
+            </div>
           </section>
-        )}
+        </div>
 
+        <Newsletter />
       </div>
-
-      <Newsletter />
     </>
   )
 }

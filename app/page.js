@@ -6,7 +6,7 @@ import styles from './page.module.css'
 
 export const metadata = {
   title: 'Money Stack Guide — UK Personal Finance Guides 2026',
-  description: 'Compare the best UK credit cards, student loans, ISAs, mortgages and savings accounts. Expert reviews, updated monthly, to help you choose smarter, save more and grow your wealth.',
+  description: 'Compare the best UK credit cards, student loans, ISAs, mortgages and savings accounts. Expert reviews, updated monthly, to help you choose smarter.',
   alternates: {
     canonical: 'https://www.moneystackguide.com',
   },

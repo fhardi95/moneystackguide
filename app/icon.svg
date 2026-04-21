@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="100" fill="#0D0F14"/>
+  <rect x="60" y="320" width="392" height="28" rx="10" fill="#C9A84C" opacity="0.35"/>
+  <text x="256" y="360" font-family="Georgia,serif" font-size="320" font-weight="800" fill="#C9A84C" text-anchor="middle" dominant-baseline="alphabetic">M</text>
+  <text x="340" y="185" font-family="Georgia,serif" font-size="130" font-weight="700" fill="#4ADE80" text-anchor="middle" opacity="0.9">$</text>
+</svg>

@@ -14,15 +14,15 @@ export async function generateMetadata({ params }) {
   const category = categories.find(c => c.slug === slug)
   if (!category) return { title: 'Not Found' }
 
-  const title = `Best ${category.name} UK 2025 — Expert Guides & Comparisons`
-  const description = `Compare the best ${category.name.toLowerCase()} options in the UK for 2025. Expert-reviewed guides, tips and comparisons to help you find the right ${category.name.toLowerCase()} product for your needs and save money.`
+  const title = `Best ${category.name} UK 2026 — Expert Guides & Comparisons`
+  const description = `Compare the best ${category.name.toLowerCase()} options in the UK for 2026. Expert-reviewed guides, tips and comparisons to help you find the right ${category.name.toLowerCase()}.`
 
   return {
     title,
     description,
     keywords: [
       `best ${category.name.toLowerCase()} UK`,
-      `${category.name.toLowerCase()} 2025`,
+      `${category.name.toLowerCase()} 2026`,
       `${category.name.toLowerCase()} comparison`,
       'UK personal finance',
       'Money Stack Guide',
@@ -90,7 +90,7 @@ export default async function CategoryPage({ params }) {
           <p className={styles.headerLabel}>Category</p>
 
           <h1 className={styles.headerTitle}>
-            Best {category.name} UK 2025
+            Best {category.name} UK 2026
           </h1>
 
           <p className={styles.headerSub}>
@@ -100,7 +100,7 @@ export default async function CategoryPage({ params }) {
           <div className={styles.headerMeta}>
             <span>{category.count} guides</span>
             <span>·</span>
-            <span>Updated April 2025</span>
+            <span>Updated April 2026</span>
             <span>·</span>
             <span>✅ Expert reviewed</span>
           </div>

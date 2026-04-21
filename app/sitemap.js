@@ -1,7 +1,7 @@
 import { articles, categories } from '@/lib/articles'
 
 export default function sitemap() {
-  const baseUrl = 'https://moneystackguide.com'
+  const baseUrl = 'https://www.moneystackguide.com'
 
   const staticPages = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },

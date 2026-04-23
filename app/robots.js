@@ -7,7 +7,8 @@ export default function robots() {
         disallow: ['/api/', '/_next/'],
       },
     ],
-    sitemap: 'https://moneystackguide.com/sitemap.xml',
-    host: 'https://moneystackguide.com',
+    sitemap: 'https://www.moneystackguide.com/sitemap.xml',
+    sitemap: 'https://www.moneystackguide.com/sitemap_.xml',
+    host: 'https://www.moneystackguide.com',
   }
 }
